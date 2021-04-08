@@ -2211,6 +2211,9 @@ readers do not read off random characters that represent icons */
 .fa-infinity:before {
   content: "\f534"; }
 
+.fa-wave-sine:before {
+  content: "\f899"; }
+
 .fa-info:before {
   content: "\f129"; }
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Raspbian WiFi Configuration Portal (RaspAP)
  *
@@ -26,34 +25,47 @@
 require 'includes/csrf.php';
 ensureCSRFSessionToken();
 
-require_once 'includes/config.php';
+require_once 'config/config.php';
+//
 require_once 'includes/defaults.php';
+//
 require_once RASPI_CONFIG.'/raspap.php';
+//
 require_once 'includes/locale.php';
+//
 require_once 'includes/functions.php';
-require_once 'includes/dashboard.php';
-require_once 'includes/authenticate.php';
+//
+////require_once 'includes/dashboard.php';
+//
+//require_once 'includes/authenticate.php';
+//
 require_once 'includes/admin.php';
-require_once 'includes/dhcp.php';
-require_once 'includes/hostapd.php';
-require_once 'includes/adblock.php';
-require_once 'includes/system.php';
-require_once 'includes/sysstats.php';
+//
+//require_once 'includes/dhcp.php';
+//
+//require_once 'includes/hostapd.php';
+//require_once 'includes/adblock.php';
+
+//require_once 'includes/system.php';
+//require_once 'includes/sysstats.php';
+//
 require_once 'includes/configure_client.php';
+
 require_once 'includes/networking.php';
 require_once 'includes/themes.php';
+
 require_once 'includes/data_usage.php';
 require_once 'includes/about.php';
-require_once 'includes/openvpn.php';
+//require_once 'includes/openvpn.php';
 require_once 'includes/torproxy.php';
-
-$config = getConfig();
+require_once 'includes/synchrona.php';
+//$config = getConfig();
 $output = $return = 0;
 $page = $_SERVER['PATH_INFO'];
 
 $theme_url = getThemeOpt();
 $toggleState = getSidebarState();
-$bridgedEnabled = getBridgedState();
+//$bridgedEnabled = getBridgedState();
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -82,7 +94,7 @@ $bridgedEnabled = getBridgedState();
     <!-- Custom Fonts -->
     <link href="dist/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-    <!-- Custom CSS -->
+<!--     Custom CSS-->
     <link href="<?php echo $theme_url; ?>" title="main" rel="stylesheet">
 
     <link rel="shortcut icon" type="image/png" href="app/icons/favicon.png?ver=2.0">
@@ -101,18 +113,25 @@ $bridgedEnabled = getBridgedState();
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
   </head>
+
   <body id="page-top">
     <!-- Page Wrapper -->
+
     <div id="wrapper">
+
       <!-- Sidebar -->
       <ul class="navbar-nav sidebar sidebar-light d-none d-md-block accordion <?php echo (isset($toggleState)) ? $toggleState : null ; ?>" id="accordionSidebar">
         <!-- Sidebar - Brand -->
+
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="wlan0_info">
           <div class="sidebar-brand-text ml-1"><?php echo RASPI_BRAND_TEXT; ?></div>
         </a>
+
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
+
         <div class="row">
           <div class="col-xs ml-3 sidebar-brand-icon">
             <img src="app/img/raspAP-logo.php" class="navbar-logo" width="64" height="64">
@@ -120,13 +139,13 @@ $bridgedEnabled = getBridgedState();
           <div class="col-xs ml-2">
             <div class="ml-1">Status</div>
             <div class="info-item-xs"><span class="icon">
-              <i class="fas fa-circle <?php echo ($hostapd_led); ?>"></i></span> <?php echo _("Hotspot").' '. _($hostapd_status); ?>
+              <i class="fas fa-circle <?php echo ("service-status-up"); ?>"></i></span> <?php echo _("Hotspot").' '. _("active"); ?>
             </div>
             <div class="info-item-xs"><span class="icon">
-              <i class="fas fa-circle <?php echo ($memused_led); ?>"></i></span> <?php echo _("Memory Use").': '. htmlspecialchars($memused, ENT_QUOTES); ?>%
+              <i class="fas fa-circle <?php echo ("service-status-up"); ?>"></i></span> <?php echo _("Memory Use").': '. htmlspecialchars(10, ENT_QUOTES); ?>%
             </div>
             <div class="info-item-xs"><span class="icon">
-              <i class="fas fa-circle <?php echo ($cputemp_led); ?>"></i></span> <?php echo _("CPU Temp").': '. htmlspecialchars($cputemp, ENT_QUOTES); ?>°C
+              <i class="fas fa-circle <?php echo ("service-status-up"); ?>"></i></span> <?php echo _("CPU Temp").': '. htmlspecialchars(40, ENT_QUOTES); ?>°C
             </div>
           </div>
         </div>
@@ -141,12 +160,12 @@ $bridgedEnabled = getBridgedState();
           <a class="nav-link" href="hostapd_conf"><i class="far fa-dot-circle fa-fw mr-2"></i><span class="nav-label"><?php echo _("Hotspot"); ?></a>
         </li>
           <?php endif; ?>
-          <?php if (RASPI_DHCP_ENABLED && !$bridgedEnabled) : ?>
+          <?php if (RASPI_DHCP_ENABLED ) : ?>
         <li class="nav-item">
           <a class="nav-link" href="dhcpd_conf"><i class="fas fa-exchange-alt fa-fw mr-2"></i><span class="nav-label"><?php echo _("DHCP Server"); ?></a>
         </li>
           <?php endif; ?>
-          <?php if (RASPI_ADBLOCK_ENABLED && !$bridgedEnabled) : ?>
+          <?php if (RASPI_ADBLOCK_ENABLED) : ?>
         <li class="nav-item">
            <a class="nav-link" href="adblock_conf"><i class="far fa-hand-paper fa-fw mr-2"></i><span class="nav-label"><?php echo _("Ad Blocking"); ?></a>
         </li>
@@ -156,7 +175,7 @@ $bridgedEnabled = getBridgedState();
            <a class="nav-link" href="network_conf"><i class="fas fa-network-wired fa-fw mr-2"></i><span class="nav-label"><?php echo _("Networking"); ?></a>
         </li> 
           <?php endif; ?>
-          <?php if (RASPI_WIFICLIENT_ENABLED && !$bridgedEnabled) : ?>
+          <?php if (RASPI_WIFICLIENT_ENABLED) : ?>
         <li class="nav-item">
           <a class="nav-link" href="wpa_conf"><i class="fas fa-wifi fa-fw mr-2"></i><span class="nav-label"><?php echo _("WiFi client"); ?></span></a>
         </li>
@@ -194,6 +213,7 @@ $bridgedEnabled = getBridgedState();
          <li class="nav-item">
           <a class="nav-link" href="about"><i class="fas fa-info-circle fa-fw mr-2"></i><span class="nav-label"><?php echo _("About RaspAP"); ?></a>
         </li>
+
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
@@ -223,7 +243,7 @@ $bridgedEnabled = getBridgedState();
           <!-- Nav Item - User -->
           <li class="nav-item dropdown no-arrow">
           <a class="nav-link" href="auth_conf">
-            <span class="mr-2 d-none d-lg-inline small"><?php echo htmlspecialchars($config['admin_user'], ENT_QUOTES); ?></span>
+            <span class="mr-2 d-none d-lg-inline small"><?php echo htmlspecialchars('admin', ENT_QUOTES); ?></span>
             <i class="fas fa-user-circle fa-3x"></i>
           </a>
           </li>
@@ -235,7 +255,9 @@ $bridgedEnabled = getBridgedState();
       <?php
         $extraFooterScripts = array();
         // handle page actions
-        switch ($page) {
+//      echo '<script>alert("HELLO: " . $page)</script>';
+      DisplaySynchrona();
+      switch ($page) {
         case "/wlan0_info":
             DisplayDashboard($extraFooterScripts);
             break;
@@ -261,7 +283,7 @@ $bridgedEnabled = getBridgedState();
             DisplayTorProxyConfig();
             break;
         case "/auth_conf":
-            DisplayAuthConfig($config['admin_user'], $config['admin_pass']);
+            DisplayAuthConfig('admin', 'pass');
             break;
         case "/save_hostapd_conf":
             SaveTORAndVPNConfig();
