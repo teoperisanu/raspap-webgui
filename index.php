@@ -120,9 +120,6 @@ $bridgedEnabled = getBridgedState();
           <div class="col-xs ml-2">
             <div class="ml-1">Status</div>
             <div class="info-item-xs"><span class="icon">
-              <i class="fas fa-circle <?php echo ($hostapd_led); ?>"></i></span> <?php echo _("Hotspot").' '. _($hostapd_status); ?>
-            </div>
-            <div class="info-item-xs"><span class="icon">
               <i class="fas fa-circle <?php echo ($memused_led); ?>"></i></span> <?php echo _("Memory Use").': '. htmlspecialchars($memused, ENT_QUOTES); ?>%
             </div>
             <div class="info-item-xs"><span class="icon">
@@ -130,57 +127,9 @@ $bridgedEnabled = getBridgedState();
             </div>
           </div>
         </div>
-        <li class="nav-item">
-          <a class="nav-link" href="wlan0_info"><i class="fas fa-tachometer-alt fa-fw mr-2"></i><span class="nav-label"><?php echo _("Dashboard"); ?></span></a>
-        </li>
-          <?php if (RASPI_HOTSPOT_ENABLED) : ?>
-        <li class="nav-item">
-          <a class="nav-link" href="hostapd_conf"><i class="far fa-dot-circle fa-fw mr-2"></i><span class="nav-label"><?php echo _("Hotspot"); ?></a>
-        </li>
-          <?php endif; ?>
-          <?php if (RASPI_DHCP_ENABLED && !$bridgedEnabled) : ?>
-        <li class="nav-item">
-          <a class="nav-link" href="dhcpd_conf"><i class="fas fa-exchange-alt fa-fw mr-2"></i><span class="nav-label"><?php echo _("DHCP Server"); ?></a>
-        </li>
-          <?php endif; ?>
-          <?php if (RASPI_ADBLOCK_ENABLED && !$bridgedEnabled) : ?>
-        <li class="nav-item">
-           <a class="nav-link" href="adblock_conf"><i class="far fa-hand-paper fa-fw mr-2"></i><span class="nav-label"><?php echo _("Ad Blocking"); ?></a>
-        </li>
-          <?php endif; ?>
-          <?php if (RASPI_NETWORK_ENABLED) : ?>
-        <li class="nav-item">
-           <a class="nav-link" href="network_conf"><i class="fas fa-network-wired fa-fw mr-2"></i><span class="nav-label"><?php echo _("Networking"); ?></a>
-        </li> 
-          <?php endif; ?>
-          <?php if (RASPI_WIFICLIENT_ENABLED && !$bridgedEnabled) : ?>
-        <li class="nav-item">
-          <a class="nav-link" href="wpa_conf"><i class="fas fa-wifi fa-fw mr-2"></i><span class="nav-label"><?php echo _("WiFi client"); ?></span></a>
-        </li>
-          <?php endif; ?>
-          <?php if (RASPI_OPENVPN_ENABLED) : ?>
-        <li class="nav-item">
-          <a class="nav-link" href="openvpn_conf"><i class="fas fa-key fa-fw mr-2"></i><span class="nav-label"><?php echo _("OpenVPN"); ?></a>
-        </li>
-          <?php endif; ?>
-          <?php if (RASPI_TORPROXY_ENABLED) : ?>
-        <li class="nav-item">
-           <a class="nav-link" href="torproxy_conf"><i class="fas fa-eye-slash fa-fw mr-2"></i><span class="nav-label"><?php echo _("TOR proxy"); ?></a>
-        </li>
-          <?php endif; ?>
-          <?php if (RASPI_CONFAUTH_ENABLED) : ?>
-        <li class="nav-item">
-        <a class="nav-link" href="auth_conf"><i class="fas fa-user-lock fa-fw mr-2"></i><span class="nav-label"><?php echo _("Authentication"); ?></a>
-        </li>
-          <?php endif; ?>
           <?php if (RASPI_CHANGETHEME_ENABLED) : ?>
         <li class="nav-item">
           <a class="nav-link" href="theme_conf"><i class="fas fa-paint-brush fa-fw mr-2"></i><span class="nav-label"><?php echo _("Change Theme"); ?></a>
-        </li>
-          <?php endif; ?>
-          <?php if (RASPI_VNSTAT_ENABLED) : ?>
-        <li class="nav-item">
-          <a class="nav-link" href="data_use"><i class="fas fa-chart-bar fa-fw mr-2"></i><span class="nav-label"><?php echo _("Data usage"); ?></a>
         </li>
           <?php endif; ?>
             <?php if (RASPI_SYSTEM_ENABLED) : ?>
@@ -233,41 +182,8 @@ $bridgedEnabled = getBridgedState();
         $extraFooterScripts = array();
         // handle page actions
         switch ($page) {
-        case "/wlan0_info":
-            DisplayDashboard($extraFooterScripts);
-            break;
-        case "/dhcpd_conf":
-            DisplayDHCPConfig();
-            break;
-        case "/wpa_conf":
-            DisplayWPAConfig();
-            break;
-        case "/network_conf":
-            DisplayNetworkingConfig();
-            break;
-        case "/hostapd_conf":
-            DisplayHostAPDConfig();
-            break;
-        case "/adblock_conf":
-            DisplayAdBlockConfig();
-            break;
-        case "/openvpn_conf":
-            DisplayOpenVPNConfig();
-            break;
-        case "/torproxy_conf":
-            DisplayTorProxyConfig();
-            break;
-        case "/auth_conf":
-            DisplayAuthConfig($config['admin_user'], $config['admin_pass']);
-            break;
-        case "/save_hostapd_conf":
-            SaveTORAndVPNConfig();
-            break;
         case "/theme_conf":
             DisplayThemeConfig($extraFooterScripts);
-            break;
-        case "/data_use":
-            DisplayDataUsage($extraFooterScripts);
             break;
         case "/system_info":
             DisplaySystem();
@@ -276,7 +192,7 @@ $bridgedEnabled = getBridgedState();
             DisplayAbout();
             break;
         default:
-            DisplayDashboard($extraFooterScripts);
+            DisplayAbout();
         }
         ?>
       </div><!-- /.container-fluid -->
