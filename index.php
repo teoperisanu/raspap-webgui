@@ -46,6 +46,7 @@ require_once 'includes/data_usage.php';
 require_once 'includes/about.php';
 require_once 'includes/openvpn.php';
 require_once 'includes/torproxy.php';
+require_once 'includes/synchrona.php';
 
 $config = getConfig();
 $output = $return = 0;
@@ -127,6 +128,9 @@ $bridgedEnabled = getBridgedState();
             </div>
           </div>
         </div>
+        <li class="nav-item">
+          <a class="nav-link" href="synchrona"><i class="fas fa-wave-square fa-fw mr-2"></i><span class="nav-label"><?php echo _("Synchrona"); ?></a>
+        </li>
           <?php if (RASPI_CHANGETHEME_ENABLED) : ?>
         <li class="nav-item">
           <a class="nav-link" href="theme_conf"><i class="fas fa-paint-brush fa-fw mr-2"></i><span class="nav-label"><?php echo _("Change Theme"); ?></a>
@@ -182,6 +186,9 @@ $bridgedEnabled = getBridgedState();
         $extraFooterScripts = array();
         // handle page actions
         switch ($page) {
+            case "/synchrona":
+                DisplaySynchrona();
+                break;
         case "/theme_conf":
             DisplayThemeConfig($extraFooterScripts);
             break;
@@ -192,7 +199,7 @@ $bridgedEnabled = getBridgedState();
             DisplayAbout();
             break;
         default:
-            DisplayAbout();
+            DisplaySynchrona();
         }
         ?>
       </div><!-- /.container-fluid -->
