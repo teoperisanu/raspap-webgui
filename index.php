@@ -32,7 +32,6 @@ require_once RASPI_CONFIG.'/raspap.php';
 require_once 'includes/locale.php';
 require_once 'includes/functions.php';
 require_once 'includes/dashboard.php';
-require_once 'includes/authenticate.php';
 require_once 'includes/admin.php';
 require_once 'includes/dhcp.php';
 require_once 'includes/hostapd.php';
@@ -160,25 +159,7 @@ $bridgedEnabled = getBridgedState();
 
     <!-- Main Content -->
     <div id="content">
-      <!-- Topbar -->
-      <nav class="navbar navbar-expand navbar-light topbar mb-1 static-top">
-        <!-- Sidebar Toggle (Topbar) -->
-        <button id="sidebarToggleTopbar" class="btn btn-link d-md-none rounded-circle mr-3">
-          <i class="fa fa-bars"></i>
-        </button>
-        <!-- Topbar Navbar -->
-        <p class="text-left brand-title mt-3 ml-2"><?php //echo _("WiFi Configuration Portal"); ?></p>
-        <ul class="navbar-nav ml-auto">
-          <div class="topbar-divider d-none d-sm-block"></div>
-          <!-- Nav Item - User -->
-          <li class="nav-item dropdown no-arrow">
-          <a class="nav-link" href="auth_conf">
-            <span class="mr-2 d-none d-lg-inline small"><?php echo htmlspecialchars($config['admin_user'], ENT_QUOTES); ?></span>
-            <i class="fas fa-user-circle fa-3x"></i>
-          </a>
-          </li>
-        </ul>
-      </nav>
+      <br>
       <!-- End of Topbar -->
       <!-- Begin Page Content -->
       <div class="container-fluid">
